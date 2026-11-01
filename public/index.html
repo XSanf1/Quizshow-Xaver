@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quizshow – Buzzer Battle</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><div class="brand">QUIZ<span>SHOW</span></div><div class="topright" id="roomLabel">Noch kein Spiel</div></header>
+<main>
+<section id="lobby" class="panel lobby">
+  <div class="eyebrow">MULTIPLAYER • LIVE BUZZER</div>
+  <h1>Wer kennt sich<br><span>am besten aus?</span></h1>
+  <p class="muted">Erstellt eine Runde oder tretet mit einem Spielcode bei. Jeder buzzert auf seinem eigenen Gerät.</p>
+  <div class="lobbygrid">
+    <form id="createForm" class="subpanel">
+      <h2>Spiel erstellen</h2>
+      <label>Dein Name<input id="hostName" maxlength="20" placeholder="z. B. Alex" required></label>
+      <label>Spielleiter-Passwort<input id="hostPassword" type="password" autocomplete="current-password" placeholder="Passwort eingeben" required></label>
+      <button class="primary" type="submit">Neue Runde starten</button>
+    </form>
+    <form id="joinForm" class="subpanel">
+      <h2>Spiel beitreten</h2>
+      <label>Dein Name<input id="joinName" maxlength="20" placeholder="z. B. Max" required></label>
+      <label>Spielcode<input id="joinCode" maxlength="6" placeholder="ABC123" required></label>
+      <button class="secondary" type="submit">Beitreten</button>
+    </form>
+  </div>
+  <p id="lobbyError" class="error"></p>
+</section>
+
+<section id="game" hidden>
+  <div class="gamebar">
+    <div><div class="eyebrow">SPIELCODE</div><strong id="codeDisplay">------</strong></div>
+    <div id="roleBadge" class="badge">SPIELER</div>
+  </div>
+  <div id="notice" class="notice">Wählt eine Kategorie und Punktzahl.</div>
+  <section id="boardSection" class="panel">
+    <div class="sectiontitle"><div><div class="eyebrow">DAS SPIELBRETT</div><h2>Wählt eure Frage</h2></div><div><button id="shuffleBtn" class="small secondary" hidden>🎲 Zufällig mischen</button> <button id="editBtn" class="small secondary" hidden>Fragen & Kategorien</button></div></div>
+    <div id="assignRow" class="assignrow" hidden><label for="targetPlayer">Frage für:</label><select id="targetPlayer"><option value="">Offen für alle (Buzzer entscheidet)</option></select></div>
+    <div id="board" class="board"></div>
+  </section>
+  <section id="questionSection" class="panel questionpanel" hidden>
+    <div class="eyebrow" id="questionMeta"></div>
+    <h2 id="questionText">Frage erscheint hier</h2>
+    <div id="answerText" class="answer" hidden></div>
+    <div id="questionScoreRow" class="assignrow" hidden><label for="questionScorer">Punkte bekommt:</label><select id="questionScorer"><option value="">Automatisch: Buzzer-Gewinner</option></select></div>
+    <div id="timerDisplay" class="timer-display" hidden></div>
+    <div class="buzzerzone">
+      <button id="buzzBtn" class="buzzer" disabled>BUZZERN!</button>
+      <div id="buzzStatus" class="muted">Warte auf die Freigabe …</div>
+    </div>
+    <div id="hostControls" class="hostcontrols" hidden>
+      <button id="openBtn" class="primary">Buzzer freigeben</button>
+      <button id="timerBtn" class="secondary" hidden>1-Minuten-Timer starten</button>
+      <button id="wrongBtn" class="danger">Falsch / keine Punkte</button>
+      <button id="rightBtn" class="success">Richtig / Punkte vergeben</button>
+      <button id="againBtn" class="secondary">Zurück zur Übersicht</button>
+    </div>
+  </section>
+  <section class="scores">
+    <div class="sectiontitle"><div><div class="eyebrow">LIVE-RANGLISTE</div><h2>Spieler & Punkte</h2></div><button id="resetBtn" class="small danger" hidden>Spiel zurücksetzen</button></div>
+    <div id="players" class="players"></div>
+    <p id="manualScoreHelp" class="muted" hidden>Spielleitung: Punktestand direkt ändern oder mit +/− anpassen.</p>
+  </section>
+  <section id="editor" class="panel" hidden>
+    <div class="sectiontitle"><div><div class="eyebrow">SPIELLEITUNG</div><h2>Fragen bearbeiten</h2></div><button id="closeEditor" class="small secondary">Schließen</button></div>
+    <p class="muted">Ändere Kategorien, Fragen, Lösungen und die Punktzahl jeder Frage. Speichern aktualisiert das Spielbrett.</p>
+    <div id="editorFields"></div>
+    <button id="saveEditor" class="primary">Änderungen speichern</button>
+  </section>
+</section>
+</main>
+<div id="toast" role="status"></div>
+<script src="/socket.io/socket.io.js"></script><script src="app.js"></script>
+</body></html>
